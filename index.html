@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHZSURBVDhPbVJfS1RBFJ8zc/+MutumpGlsUUFpbY8JQhgpEn2J3nrooa/RS36EvkTgUz5ICdKD9JJQbbARRIoK2eK67u69d06/M3MzjX7MPfd3Zs6ZOf9o+V1VebBSFJjHvyor8rr2R2eWK/hgu/i+lUOCl/tUEnohL4CJOzveWs2aG1nW5yihfMBxStdno8ZCYivle5rgJOY8OOJXz7vvV/qdn86wvnolhgT/8Hqwstztth1CImK6NhM8VXWMsh6eEtxftLMPaPONW1/rh52p6ejRM0uakIPAGKVNoIJW07U+c6tZ+gN5j9t7PofwQpyo4Rr1j/5a2IrudRzIpRmDHOqNKFSJbt2Vf5yqxEqWsudhq1S/HU3fi2qTiAI5+rqywjWMhbthDXmyXC7FI6BsgEh8ZvSCaFqr2FKRCQ/A2c6X4tPbbO+bS0fo3Lj3VVw6gCZDZxzQh6Ae7ruvm/mPj8XkDWNHcLNHUShXBPp/nJ/StQkx9p32qR4furWXvfauVAYInQ68dlEvPR1KhyUX8/BJgtiwopRuzsUIY7flBseMtiB1ramxEM8/tlECG9ipU9P6Zx4xcL92XOfAVUY1ItFGdk9Pq6giZB6Fw2Ksbi7fiSGD9QlYqd/wDte7aAMg2AAAAABJRU5ErkJggg==" type="image/x-icon">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snake</title>
+  <style>
+    html, body {
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow: auto;
+      border: 0 none;
+      color: white;
+      min-height: 100%;
+
+      /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#3b3d6d+0,282a49+100 */
+      background: #3b3d6d; /* Old browsers */
+      background: -moz-radial-gradient(center, ellipse cover,  #3b3d6d 0%, #282a49 100%); /* FF3.6-15 */
+      background: -webkit-radial-gradient(center, ellipse cover,  #3b3d6d 0%,#282a49 100%); /* Chrome10-25,Safari5.1-6 */
+      background: radial-gradient(ellipse at center,  #3b3d6d 0%,#282a49 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3b3d6d', endColorstr='#282a49',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+
+      -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+      -khtml-user-select: none; /* Konqueror HTML */
+      -moz-user-select: none; /* Old versions of Firefox */
+      -ms-user-select: none; /* Internet Explorer/Edge */
+      user-select: none;
+    }
+
+    #draw-can {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      margin-top: -300px;
+      margin-left: -400px;
+      width: 800px;
+      height: 600px;
+
+      /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#aec708+0,8a9b07+100 /
+      background: #aec708; /* Old browsers /
+      background: -moz-linear-gradient(-45deg,  #aec708 0%, #8a9b07 100%); /* FF3.6-15 /
+      background: -webkit-linear-gradient(-45deg,  #aec708 0%,#8a9b07 100%); /* Chrome10-25,Safari5.1-6 /
+      background: linear-gradient(135deg,  #aec708 0%,#8a9b07 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ /
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#aec708', endColorstr='#8a9b07',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+
+      /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#8fcc0b+0,83be0f+100 */
+      background: #8fcc0b; /* Old browsers */
+      background: -moz-linear-gradient(-45deg,  #8fcc0b 0%, #83be0f 100%); /* FF3.6-15 */
+      background: -webkit-linear-gradient(-45deg,  #8fcc0b 0%,#83be0f 100%); /* Chrome10-25,Safari5.1-6 */
+      background: linear-gradient(135deg,  #8fcc0b 0%,#83be0f 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8fcc0b', endColorstr='#83be0f',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+
+      -webkit-box-shadow: inset 0px 0px 35px 0px rgba(0,0,0,0.75), 0px 0px 15px 0px rgba(143,204,11,.5);
+      -moz-box-shadow: inset 0px 0px 35px 0px rgba(0,0,0,0.75), 0px 0px 15px 0px rgba(143,204,11,.5);
+      box-shadow: inset 0px 0px 35px 0px rgba(0,0,0,0.75), 0px 0px 15px 0px rgba(143,204,11,.5);
+    }
+
+    #overlay {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      margin-top: -300px;
+      margin-left: -400px;
+      width: 800px;
+      height: 600px;
+      opacity: 0.15;
+      background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAA/SURBVDhPY/j//z9B3HmUF0hhl0PGIHVMDFQGowZSDkaggYygxAhlUwdgS/HoeDSn4AWjBlIOqG4glXMKAwMAji5506M7O7UAAAAASUVORK5CYII=');
+    }
+
+    #title, #score {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 800px;
+      height: 50px;
+      line-height: 50px;
+      text-align: center;
+      vertical-align: middle;
+      margin-top: -370px;
+      margin-left: -400px;
+      color: #CDCDCD;
+      text-shadow: 0px 0px 5px #000000;
+    }
+
+    #score {
+      margin-top: 320px;
+    }
+
+    #scores {
+      position: fixed;
+      top: 50%;
+      left: 40px;
+      height: 440px;
+      margin-top: -220px;
+    }
+
+    table.score-table {
+      border: 0 none;
+      border-spacing: 0px;
+    }
+    table.score-table td {
+      border-bottom: 1px solid #ffffff7f;
+      width: 200px;
+      text-align: center;
+      opacity: .8;
+    }
+    table.score-table tr:last-child td {
+      border-bottom: 0 none;
+    }
+    table.score-table th:first-child, table.score-table td:first-child {
+      border-right: 1px solid #ffffff7f;
+    }
+    table.score-table th {
+      border-bottom: 3px double #ffffff7f;
+    }
+    table.score-table tr:first-child th:first-child {
+      border-right: 0 none;
+      border-bottom: 0 none;
+    }
+
+    #options {
+      position: fixed;
+      top: 50%;
+      right: 40px;
+      height: 80px;
+      margin-top: -40px;
+    }
+
+    table.options th {
+      text-align: left;
+    }
+    table.options tr:first-child th {
+      text-align: center;
+    }
+    table.options td {
+      padding: 0 0 0 20px;
+    }
+    table.options td span {
+      padding: 0 3px;
+      cursor: pointer;
+    }
+    table.options td span:hover {
+      background: rgba(255,255,255,.25);
+    }
+  </style>
+</head>
+<body>
+  <div id="scores"></div>
+  <div id="options">
+    <table class="options">
+      <tr><th colspan="2">OPTIONS</th></tr>
+      <tr><th>Walls:</th><td><span id="walls-cb">&#10004;</span></td></tr>
+      <tr><th>Frame:</th><td><span id="teleport-cb">&#10004;</span></td></tr>
+      <tr><th>Lifes:</th><td><span id="lifes-cb">&#10006;</span></td></tr>
+    </table>
+  </div>
+  <canvas id="draw-can" width="800" height="600"></canvas>
+  <div id="overlay"></div>
+  <h1 id="title">SNAKE</h1>
+  <h3 id="score">Score: <span id="score-points">loading ...</span></h3>
+  <script type="text/javascript">
+    new (function() {
+
+      const TICK_LENGTH = 100;
+      const LIFE_LIFETIME = 5 * 1000;
+      const INITIAL_LIFES = 3;
+      const SIZE = 10;
+      const SIZE_PADDING = 2;
+      const WIDTH_PX = 800;
+      const HEIGHT_PX = 600;
+      const WIDTH = WIDTH_PX / 2 / SIZE;
+      const HEIGHT = HEIGHT_PX / 2 / SIZE;
+      const PART_RADIUS = Math.sqrt(SIZE * SIZE + (SIZE - SIZE_PADDING) * (SIZE - SIZE_PADDING))
+      const SNAKE_INITIAL_LENGTH = 3;
+
+      const BLOCKED = -1;
+      const FREE = 0;
+      const FRUIT = 1;
+      const WALL = 2;
+      const LIFE = 3;
+
+      this.keyMap = {
+        'w': 'w',
+        'a': 'a',
+        's': 's',
+        'd': 'd',
+        ' ': ' ',
+        'Enter': ' ',
+        'ArrowRight': 'd',
+        'ArrowLeft': 'a',
+        'ArrowDown': 's',
+        'ArrowUp': 'w',
+        'Escape': ' '
+      };
+      this.pressedKeys = [];
+
+      this.onKeyDown = function(e) {
+        let key = this.keyMap[e.key] ?? '<>';
+        if(key == ' ') {
+          this.paused = !this.paused;
+          if (this.lost) {
+            window.location.reload();
+          }
+        } else if (this.pressedKeys[this.pressedKeys.length - 1] != key) {
+          this.pressedKeys.push(key);
+        }
+      }.bind(this);
+      window.addEventListener("keydown", this.onKeyDown);
+
+      this.toggleWalls = function() {
+        if(this.score > 0 && !this.lost) {
+          if (!confirm("!!!WARNING!!!\nChanging options mid game will exit you current game whithout saving its score!")) {
+            return;
+          }
+        }
+        this.options.walls = !this.options.walls;
+        window.localStorage.setItem('options', JSON.stringify(this.options));
+        window.location.reload();
+      }.bind(this);
+      let wallCb = document.getElementById('walls-cb');
+      wallCb.addEventListener('click', this.toggleWalls);
+
+      this.toggleTeleport = function() {
+        if(this.score > 0 && !this.lost) {
+          if (!confirm("!!!WARNING!!!\nChanging options mid game will exit you current game whithout saving its score!")) {
+            return;
+          }
+        }
+        this.options.teleport = !this.options.teleport;
+        window.localStorage.setItem('options', JSON.stringify(this.options));
+        window.location.reload();
+      }.bind(this);
+      let teleportCb = document.getElementById('teleport-cb');
+      teleportCb.addEventListener('click', this.toggleTeleport);
+
+      this.toggleLifes = function() {
+        if(this.score > 0 && !this.lost) {
+          if (!confirm("!!!WARNING!!!\nChanging options mid game will exit you current game whithout saving its score!")) {
+            return;
+          }
+        }
+        this.options.lifes = !this.options.lifes;
+        window.localStorage.setItem('options', JSON.stringify(this.options));
+        window.location.reload();
+      }.bind(this);
+      let lifesCb = document.getElementById('lifes-cb');
+      lifesCb.addEventListener('click', this.toggleLifes);
+
+      const colors = {
+        0: '#293200',
+        1: '#212800',
+        2: '#354200',
+        3: '#212800',
+        4: '#293200'
+      };
+      /*const colorsOLD = {
+        0: '#5f680f',
+        1: '#4b520c',
+        2: '#919e18',
+        3: '#4b520c',
+        4: '#5f680f'
+      };*/
+
+      ////////////////////////////////////////////////////////////////////////////
+      function Field(width, height, game) {
+        this.game = game;
+        this.width = width;
+        this.height = height;
+        this.data = [];
+        for(let x = 0; x < this.width; x++) {
+          let a = [];
+          for(let y = 0; y < this.height; y++) {
+            a.push(FREE);
+          }
+          this.data.push(a);
+        }
+
+        this.get = function(x, y) {
+          x = (x + this.width) % this.width;
+          y = (y + this.height) % this.height;
+          return this.data[x][y];
+        }.bind(this);
+
+        this.set = function(x, y, value) {
+          x = (x + this.width) % this.width;
+          y = (y + this.height) % this.height;
+          if (this.data[x][y] != WALL) {
+            this.data[x][y] = value;
+          }
+        }.bind(this);
+
+        this.addFruit = function() {
+          while(true) {
+            let x = (1000 + Math.round(Math.random() * 9999)) % this.width;
+            let y = (1000 + Math.round(Math.random() * 9999)) % this.height;
+            let v = this.get(x, y);
+            if (v == FREE) {
+              this.set(x, y, FRUIT);
+              return;
+            }
+          }
+        }.bind(this);
+
+        this.getWaitTime = function() {
+          return (this.game.snake.length / 2) * TICK_LENGTH * (10 + (Math.random() * 40));
+        }.bind(this);
+
+        this.addLife = function() {
+          if (this.game.lost) return;
+          while(this.game.options.lifes) {
+            let x = (1000 + Math.round(Math.random() * 9999)) % this.width;
+            let y = (1000 + Math.round(Math.random() * 9999)) % this.height;
+            let v = this.get(x, y);
+            if (v == FREE) {
+              this.set(x, y, LIFE);
+              setTimeout(function(x, y) {
+                if (this.get(x, y) == LIFE) {
+                  this.set(x, y, FREE);
+                }
+                setTimeout(this.addLife, this.getWaitTime());
+              }.bind(this, x, y), LIFE_LIFETIME);
+              return;
+            }
+          }
+        }.bind(this);
+
+        this.draw = function(ctx) {
+          for(let x = 0; x < this.width; x++) {
+            for(let y = 0; y < this.height; y++) {
+              let v = this.get(x, y);
+              if(v == FRUIT) {
+                let posX = (x * SIZE * 2) + SIZE;
+                let posY = (y * SIZE * 2) + SIZE;
+
+                ctx.beginPath();
+                ctx.arc(posX, posY, PART_RADIUS, 0, 2 * Math.PI);
+                // Old Color: ctx.fillStyle = '#9e8c18';
+                ctx.fillStyle = '#654700';
+                ctx.fill();
+                ctx.stroke();
+                ctx.closePath();
+
+                ctx.beginPath();
+                posY -= 4;
+                ctx.moveTo(posX, posY);
+                ctx.arc(posX, posY, PART_RADIUS, -Math.PI / 2.5, -Math.PI / 5);
+                // Old Color: ctx.fillStyle = '#050';
+                ctx.fillStyle = '#005300';
+                ctx.fill();
+                ctx.closePath();
+              } else if (v == LIFE) {
+                let posX = (x * SIZE * 2) + SIZE;
+                let posY = (y * SIZE * 2) + SIZE;
+                ctx.beginPath();
+                ctx.moveTo(posX - SIZE, posY + (SIZE / 2));
+                ctx.lineTo(posX, posY + (SIZE / 2));
+                ctx.arc(posX + (SIZE / 2), posY, (SIZE / 2), Math.PI / 2, -Math.PI / 1.5, true);
+                ctx.arc(posX - (SIZE / 3), posY - (SIZE / 4), (SIZE / 3), -Math.PI / 4, -(Math.PI + Math.PI / 4), true);
+                ctx.fillStyle = '#212800';
+                ctx.fill();
+                ctx.closePath();
+                ctx.beginPath();
+                ctx.arc(posX + SIZE, posY - (SIZE / 3), SIZE / 2, -Math.PI / 2, Math.PI / 1.8);
+                ctx.strokeStyle = '#212800';
+                ctx.stroke();
+                ctx.closePath();
+              } else if (v == WALL) {
+                let posX = (x * SIZE * 2);
+                let posY = (y * SIZE * 2);
+                ctx.beginPath();
+                ctx.rect(posX, posY, SIZE * 2, SIZE * 2);
+                ctx.fillStyle = '#212800';
+                ctx.fill();
+                ctx.closePath();
+              }/* else if (v == BLOCKED) {
+                let posX = (x * SIZE * 2);
+                let posY = (y * SIZE * 2);
+                ctx.beginPath();
+                ctx.rect(posX + 3, posY + 3, SIZE * 2 - 6, SIZE * 2 - 6);
+                ctx.fillStyle = '#ff00007f';
+                ctx.fill();
+                ctx.closePath();
+              }*/
+            }
+          }
+        }.bind(this);
+      }
+
+      ////////////////////////////////////////////////////////////////////////////
+      function Part(index, next) {
+        this.previous = null;
+        this.next = next;
+        this.index = index;
+        this.x = (WIDTH / 2) - index;
+        this.y = HEIGHT / 2;
+        this.sides = { top: false, left: true, right: true, bottom: false };
+
+        this.isAboveOf = function(other) {
+          let yD = this.y - other.y;
+          if(yD > 1) yD -= HEIGHT;
+          if(yD < -1) yD += HEIGHT;
+          if(yD == -1) return true;
+          return false;
+        }.bind(this);
+        this.isBelowOf = function(other) {
+          let yD = this.y - other.y;
+          if(yD > 1) yD -= HEIGHT;
+          if(yD < -1) yD += HEIGHT;
+          if(yD == 1) return true;
+          return false;
+        }.bind(this);
+        this.isLeftOf = function(other) {
+          let xD = this.x - other.x;
+          if(xD > 1) xD -= WIDTH;
+          if(xD < -1) xD += WIDTH;
+          if(xD == -1) return true;
+          return false;
+        }.bind(this);
+        this.isRightOf = function(other) {
+          let xD = this.x - other.x;
+          if(xD > 1) xD -= WIDTH;
+          if(xD < -1) xD += WIDTH;
+          if(xD == 1) return true;
+          return false;
+        }.bind(this);
+
+        this.update = function(tick) {
+          if (this.x >= WIDTH) this.x %= WIDTH;
+          if (this.y >= HEIGHT) this.y %= HEIGHT;
+
+          if (this.x < 0) this.x += WIDTH;
+          if (this.y < 0) this.y += HEIGHT;
+
+          this.sides = { top: false, left: false, right: false, bottom: false };
+          if(this.next) {
+            if(this.next.isAboveOf(this)) this.sides.top = true;
+            if(this.next.isBelowOf(this)) this.sides.bottom = true;
+            if(this.next.isLeftOf(this)) this.sides.left= true;
+            if(this.next.isRightOf(this)) this.sides.right = true;
+          }
+          if(this.previous) {
+            if(this.previous.isAboveOf(this)) this.sides.top = true;
+            if(this.previous.isBelowOf(this)) this.sides.bottom = true;
+            if(this.previous.isLeftOf(this)) this.sides.left= true;
+            if(this.previous.isRightOf(this)) this.sides.right = true;
+          }
+        }.bind(this);
+
+        this.draw = function(ctx, isTail, isHead, open) {
+          if (isTail) {
+            let dirX = this.next.x - this.x;
+            let dirY = this.next.y - this.y;
+            if (dirX > 1) dirX = -1;
+            if (dirX < -1) dirX = 1;
+            if (dirY > 1) dirY = -1;
+            if (dirY < -1) dirY = 1;
+            ctx.beginPath();
+            ctx.moveTo((this.x * SIZE * 2) + SIZE - (SIZE * dirX), (this.y * SIZE * 2) + SIZE - (SIZE * dirY));
+            ctx.arc(
+              (this.x * SIZE * 2) + SIZE,
+              (this.y * SIZE * 2) + SIZE,
+              PART_RADIUS * 1,
+              (-0.225 * Math.PI) + ((Math.PI / 2) * dirY) + (Math.PI * (dirX==-1?1:0)),
+              (0.225 * Math.PI) + ((Math.PI / 2) * dirY) + (Math.PI * (dirX==-1?1:0))
+            );
+            ctx.closePath();
+          } else if (isHead) {
+            let [dirX, dirY] = isHead;
+            ctx.beginPath();
+            ctx.moveTo((this.x * SIZE * 2) + SIZE, (this.y * SIZE * 2) + SIZE);
+            let open1 = open * 0.125;
+            let open2 = -open * 0.125;
+            if(open1 == open2) open2 = 2 * Math.PI;
+            ctx.arc((this.x * SIZE * 2) + SIZE, (this.y * SIZE * 2) + SIZE, PART_RADIUS, (open1 * Math.PI) + ((Math.PI / 2) * dirY) + (Math.PI * (dirX==-1?1:0)), (open2 * Math.PI) + ((Math.PI / 2) * dirY) + (Math.PI * (dirX==-1?1:0)));
+            ctx.closePath();
+          } else {
+            // New Part Style
+            if(this.sides.top && this.sides.bottom) {
+              ctx.beginPath();
+              ctx.moveTo((this.x * SIZE * 2) + SIZE_PADDING, (this.y * SIZE * 2));
+              ctx.lineTo((this.x * SIZE * 2) + SIZE_PADDING, (this.y * SIZE * 2) + (SIZE * 2));
+              ctx.lineTo((this.x * SIZE * 2) + (SIZE * 2) - SIZE_PADDING, (this.y * SIZE * 2) + (SIZE * 2));
+              ctx.lineTo((this.x * SIZE * 2) + (SIZE * 2) - SIZE_PADDING, (this.y * SIZE * 2));
+              ctx.closePath();
+            } else if(this.sides.left && this.sides.right) {
+              ctx.beginPath();
+              ctx.moveTo((this.x * SIZE * 2), (this.y * SIZE * 2) + SIZE_PADDING);
+              ctx.lineTo((this.x * SIZE * 2) + (SIZE * 2), (this.y * SIZE * 2) + SIZE_PADDING);
+              ctx.lineTo((this.x * SIZE * 2) + (SIZE * 2), (this.y * SIZE * 2) + (SIZE * 2) - SIZE_PADDING);
+              ctx.lineTo((this.x * SIZE * 2), (this.y * SIZE * 2) + (SIZE * 2) - SIZE_PADDING);
+              ctx.closePath();
+            } else if(this.sides.left && this.sides.top) {
+              ctx.beginPath();
+              ctx.arc((this.x * SIZE * 2), (this.y * SIZE * 2), SIZE_PADDING, 0, Math.PI / 2);
+              ctx.arc((this.x * SIZE * 2), (this.y * SIZE * 2), SIZE + SIZE - SIZE_PADDING, Math.PI / 2, 0, true);
+              ctx.closePath();
+            } else if(this.sides.left && this.sides.bottom) {
+              ctx.beginPath();
+              ctx.arc((this.x * SIZE * 2), (this.y * SIZE * 2) + (SIZE * 2), SIZE_PADDING, 0, -Math.PI / 2, true);
+              ctx.arc((this.x * SIZE * 2), (this.y * SIZE * 2) + (SIZE * 2), SIZE + SIZE - SIZE_PADDING, -Math.PI / 2, 0);
+              ctx.closePath();
+            } else if(this.sides.right && this.sides.top) {
+              ctx.beginPath();
+              ctx.arc((this.x * SIZE * 2) + (SIZE * 2), (this.y * SIZE * 2), SIZE_PADDING, Math.PI, Math.PI / 2, true);
+              ctx.arc((this.x * SIZE * 2) + (SIZE * 2), (this.y * SIZE * 2), SIZE + SIZE - SIZE_PADDING, Math.PI / 2, Math.PI);
+              ctx.closePath();
+            } else if(this.sides.right && this.sides.bottom) {
+              ctx.beginPath();
+              ctx.arc((this.x * SIZE * 2) + (SIZE * 2), (this.y * SIZE * 2) + (SIZE * 2), SIZE_PADDING, Math.PI * 1.5, Math.PI, true);
+              ctx.arc((this.x * SIZE * 2) + (SIZE * 2), (this.y * SIZE * 2) + (SIZE * 2), SIZE + SIZE - SIZE_PADDING, Math.PI, Math.PI * 1.5);
+              ctx.closePath();
+            }
+            else {
+              // Old Part Style
+              ctx.beginPath();
+              ctx.arc((this.x * SIZE * 2) + SIZE, (this.y * SIZE * 2) + SIZE, PART_RADIUS, 0, 2 * Math.PI);
+              ctx.closePath();
+            }
+          }
+          ctx.fillStyle = colors[this.index % 5];
+          ctx.fill();
+          //ctx.stroke();
+        }.bind(this);
+      }
+
+      ////////////////////////////////////////////////////////////////////////////
+      function Snake(game, length, field) {
+        this.game = game;
+        this.length = length;
+        this.field = field;
+        this.open = 1;
+        this.dir = [1, 0];
+        this.parts = [];
+        for (let i = 0; i < length; i++) {
+          let part = new Part(i, this.parts.length > 0 ? this.parts[this.parts.length - 1] : null);
+          if (this.parts.length > 0) {
+            this.parts[this.parts.length - 1].previous = part;
+          }
+          this.parts.push(part);
+          this.field.set(part.x, part.y, BLOCKED);
+        }
+        this.parts.reverse();
+
+        this.update = function(tick) {
+          if(this.game.pressedKeys.length > 0) {
+            let key = this.game.pressedKeys.splice(0, 1)[0];
+            if (key == 'w' && this.dir.join() != '0,1') {
+              this.dir = [0, -1];
+            }
+            else if (key == 'a' && this.dir.join() != '1,0') {
+              this.dir = [-1, 0];
+            }
+            else if (key == 's' && this.dir.join() != '0,-1') {
+              this.dir = [0, 1];
+            }
+            else if (key == 'd' && this.dir.join() != '-1,0') {
+              this.dir = [1, 0];
+            }
+          }
+
+          let lastPart = this.parts[this.parts.length - 1];
+          let [dirX, dirY] = this.dir;
+          let newPosX = lastPart.x + dirX;
+          let newPosY = lastPart.y + dirY;
+          let newNewPosX = newPosX + dirX;
+          let newNewPosY = newPosY + dirY;
+          let fieldValue = this.field.get(newPosX, newPosY);
+          let nextfieldValue = this.field.get(newNewPosX, newNewPosY);
+
+          if ((fieldValue == BLOCKED || fieldValue == WALL) && (this.game.lifes <= 0)) {
+              this.game.paused = true;
+              this.game.lost = true;
+              let lastmax = Math.max(0, ...(Object.values(this.game.scores).map(pn => pn[0])));
+              let title = "GAME OVER";
+              if (this.game.score > lastmax) {
+                title = "NEW HIGHTSCORE";
+              }
+              this.game.menuText = title + "\n\n\nScore: " + this.game.score + "\n\n\nReload to try again.";
+              this.game.UpdateScores([new Date(), this.game.score]);
+          } else {
+            if (fieldValue == BLOCKED || fieldValue == WALL) {
+              this.game.lifes -= 1;
+              this.game.UpdateScore();
+            }
+
+            let newPart = null;
+            let firstPart = this.parts[0];
+            if (fieldValue == FRUIT || fieldValue == LIFE) {
+              newPart = new Part(this.parts.length, this.parts[0]);
+              this.parts[0].previous = newPart;
+              newPart.x = firstPart.x;
+              newPart.y = firstPart.y;
+              if (fieldValue == FRUIT) {
+                this.game.score += this.length;
+                this.field.addFruit();
+              } else if (fieldValue == LIFE && this.game.options.lifes) {
+                  this.game.lifes += 1;
+              }
+              this.open = 0;
+            } else {
+              this.field.set(firstPart.x, firstPart.y, FREE);
+              if (nextfieldValue == FRUIT || nextfieldValue == LIFE) {
+                this.open = 3;
+              } else {
+                this.open = 1;
+              }
+            }
+
+            for (let i = 0; i < this.parts.length - 1; i++) {
+              const part = this.parts[i];
+              const partNex = this.parts[i + 1];
+              part.x = partNex.x;
+              part.y = partNex.y;
+            }
+            lastPart.x = newPosX;
+            lastPart.y = newPosY;
+
+            if(newPart != null) {
+              this.parts.unshift(newPart);
+              this.length += 1;
+            }
+
+            this.field.set(newPosX, newPosY, BLOCKED);
+          }
+
+          for (const part of this.parts) {
+            part.update(tick);
+          }
+        }.bind(this);
+
+        this.draw = function(ctx) {
+          let isTail = true;
+          let partCount = 0
+          for (const part of this.parts) {
+            part.draw(ctx, isTail, (++partCount == this.parts.length) ? this.dir : false, this.open);
+            isTail = false;
+          }
+
+          let [dirX, dirY] = this.dir;
+          let x = (this.parts[this.parts.length-1].x * SIZE * 2) + SIZE;
+          let y = (this.parts[this.parts.length-1].y * SIZE * 2) + SIZE;
+          y -= (SIZE / 1.5) * Math.abs(dirX);
+          x -= (SIZE / 1.5) * dirY;
+          ctx.beginPath();
+          ctx.arc(x, y, 2.5, 0, 2 * Math.PI);
+          // Old Eye Color:  ctx.fillStyle = '#313608';
+          ctx.fillStyle = '#9EB308';
+          ctx.fill();
+          ctx.stroke();
+
+        }.bind(this);
+      }
+
+      ////////////////////////////////////////////////////////////////////////////
+      this.scoreSpan = document.getElementById('score-points');
+      this.drawCan = document.getElementById("draw-can");
+
+      this.ctx = this.drawCan.getContext('2d');
+      this.tick = 0;
+
+      this.options = JSON.parse(window.localStorage.getItem('options') ?? '{"walls":false,"teleport":true,"lifes":true}')
+      this.scoreKey = function() {
+        let key = 'scores_';
+        key += this.options.walls ? 'W' : '-';
+        key += this.options.teleport ? 'T' : '-';
+        key += this.options.lifes ? 'L' : '-';
+        return key;
+      }.bind(this);
+      this.scores = JSON.parse(window.localStorage.getItem(this.scoreKey()) ?? "{}");
+      this.score = 0;
+      this.lifes = this.options.lifes ? INITIAL_LIFES : 0;
+      this.paused = true;
+      this.lost = false;
+      this.menuText = "Welcome to SNAKE\n\n\nPress W, A, S, D to move\n\n\nPress space to start / pause or unpause / reload\n\n\nHave fun and eat on!"
+
+      wallCb.innerHTML = this.options.walls ? '&#10004;': '&#10006;';
+      teleportCb.innerHTML = this.options.teleport ? '&#10006;': '&#10004;';
+      lifesCb.innerHTML = this.options.lifes ? '&#10004;': '&#10006;';
+
+      this.field = new Field(WIDTH, HEIGHT, this);
+      if (this.options.walls) {
+        for(let x = Math.round(WIDTH * 0.25); x < WIDTH * 0.75; x++) {
+          this.field.set(x, 10, WALL);
+          this.field.set(x, 20, WALL);
+        }
+      }
+      if (!(this.options.teleport)) {
+        for(let x = 0; x < WIDTH; x++) {
+          this.field.set(x, 0, WALL);
+          this.field.set(x, HEIGHT - 1, WALL);
+        }
+        for(let y = 1; y < HEIGHT - 1; y++) {
+          this.field.set(0, y, WALL);
+          this.field.set(WIDTH - 1, y, WALL);
+        }
+      }
+      this.field.addFruit();
+
+      this.snake = new Snake(this, SNAKE_INITIAL_LENGTH, this.field);
+
+      this.UpdateScores = function(newScore) {
+
+        if (newScore) {
+          let [date, points] = newScore;
+          if (points > 0) {
+            let name = prompt("Enter Score Name:").replace(/\s{2,}/gi,' ').trim();
+            this.scores[date.getTime() + ''] = [points, name];
+            let keys = Object.keys(this.scores);
+            keys.sort((a,b) => this.scores[a][0] - this.scores[b][0]);
+            if(keys.length >= 20) {
+              delete this.scores[keys[0]];
+            }
+            window.localStorage.setItem(this.scoreKey(), JSON.stringify(this.scores));
+          }
+        }
+
+        let sdiv = document.getElementById('scores');
+        sdiv.innerHTML = '';
+
+        let keys = Object.keys(this.scores);
+        if (keys.length > 0) {
+          let table = document.createElement("table");
+          table.className = "score-table";
+
+          let hrow1 = document.createElement("tr");
+          hrow1.innerHTML = "<th colspan=\"2\">HIGHT SCORE</th>";
+          table.appendChild(hrow1);
+
+          let hrow2 = document.createElement("tr");
+          hrow2.innerHTML = "<th>Date</th><th>Points</th>";
+          table.appendChild(hrow2);
+
+          keys = Object.keys(this.scores);
+          keys.sort((a,b) => this.scores[b][0] - this.scores[a][0]);
+
+          for(let key of keys) {
+            let date = new Date(parseInt(key));
+            let [points, name] = this.scores[key];
+            if (!name) {
+              name = (date.getFullYear() + '').substr(2);
+              name += '-' + (date.getMonth() + 1);
+              name += '-' + date.getDate();
+              name += ' ' + date.getHours();
+              name += ':';
+              min = '' + date.getMinutes()
+              if (min.length < 2) min = '0' + min;
+              name += min;
+            }
+            let row = document.createElement('tr');
+            row.innerHTML = `<td>${name}</td><td>${points}</td>`;
+            table.appendChild(row);
+          }
+          sdiv.appendChild(table);
+        }
+      }.bind(this);
+
+      this.UpdateScore = function () {
+        let text = this.score;
+        if (this.options.lifes) {
+          text += "&#160;&#160;&#160;&#160;/&#160;&#160;&#160;&#160;<b>Lifes:</b>&#160;";
+          if (this.lifes <= 0) {
+            text += "0";
+          } else if (this.lifes <= 5) {
+            for(let i = 0; i < this.lifes; i++) {
+              text += "&#10084;";
+            }
+          } else {
+            text += "&#10084; x " + this.lifes;
+          }
+        }
+        this.scoreSpan.innerHTML = text;
+      }.bind(this);
+
+      this.UpdateScore();
+      this.UpdateScores();
+
+      this.unstarted = true;
+
+      this.update = function(tick) {
+        if(!this.paused && !this.lost) {
+
+          if (this.unstarted) {
+            this.unstarted = false;
+            if (this.options.lifes) {
+              setTimeout(function() {
+                this.field.addLife();
+              }.bind(this), TICK_LENGTH * SNAKE_INITIAL_LENGTH * 2);
+            }
+          }
+
+          this.menuText = '\n\n\n\n\nPaused';
+          this.snake.update(tick);
+          this.UpdateScore();
+        }
+      }.bind(this);
+
+      this.draw = function(ctx) {
+        ctx.clearRect(0, 0, this.drawCan.width, this.drawCan.height);
+        ctx.strokeStyle = '#313608';
+        this.snake.draw(ctx);
+        this.field.draw(ctx);
+        if(this.paused || this.lost) {
+          ctx.beginPath();
+          ctx.rect(100, 100, WIDTH_PX - 200, HEIGHT_PX - 200);
+          ctx.fillStyle = 'rgba(0, 0,0,0.5)';
+          ctx.fill();
+
+          ctx.fillStyle = '#fff';
+          ctx.font = "20px arial";
+          ctx.textAlign = 'center';
+          let lineIndex = 0;
+          for(let line of this.menuText.split('\n')) {
+            ctx.fillText(line, WIDTH_PX / 2, 200 + (20 * lineIndex++));
+          }
+        }
+      }.bind(this);
+
+      const loop = function() {
+        this.tick += 1;
+        this.update(this.tick);
+        this.draw(this.ctx);
+      }.bind(this);
+
+      setInterval(loop, TICK_LENGTH);
+    })();
+  </script>
+</body>
+</html>
