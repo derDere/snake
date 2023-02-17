@@ -707,7 +707,7 @@
         if (newScore) {
           let [date, points] = newScore;
           if (points > 0) {
-            let name = prompt("Enter Score Name:").replace(/\s{2,}/gi,' ').trim();
+            let name = (prompt("Enter Score Name:") ?? '').replace(/\s{2,}/gi,' ').trim();
             this.scores[date.getTime() + ''] = [points, name];
             let keys = Object.keys(this.scores);
             keys.sort((a,b) => this.scores[a][0] - this.scores[b][0]);
