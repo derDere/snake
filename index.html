@@ -6,6 +6,9 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Snake</title>
+  <!--
+    Created by Phillip Deremer (http://github.com/derDere/snake)
+  -->
   <style>
     html, body {
       font-family: Arial, Helvetica, sans-serif;
@@ -39,13 +42,6 @@
       margin-left: -400px;
       width: 800px;
       height: 600px;
-
-      /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#aec708+0,8a9b07+100 /
-      background: #aec708; /* Old browsers /
-      background: -moz-linear-gradient(-45deg,  #aec708 0%, #8a9b07 100%); /* FF3.6-15 /
-      background: -webkit-linear-gradient(-45deg,  #aec708 0%,#8a9b07 100%); /* Chrome10-25,Safari5.1-6 /
-      background: linear-gradient(135deg,  #aec708 0%,#8a9b07 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ /
-      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#aec708', endColorstr='#8a9b07',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 
       /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#8fcc0b+0,83be0f+100 */
       background: #8fcc0b; /* Old browsers */
@@ -257,13 +253,6 @@
         3: '#212800',
         4: '#293200'
       };
-      /*const colorsOLD = {
-        0: '#5f680f',
-        1: '#4b520c',
-        2: '#919e18',
-        3: '#4b520c',
-        4: '#5f680f'
-      };*/
 
       ////////////////////////////////////////////////////////////////////////////
       function Field(width, height, game) {
@@ -376,15 +365,7 @@
                 ctx.fillStyle = '#212800';
                 ctx.fill();
                 ctx.closePath();
-              }/* else if (v == BLOCKED) {
-                let posX = (x * SIZE * 2);
-                let posY = (y * SIZE * 2);
-                ctx.beginPath();
-                ctx.rect(posX + 3, posY + 3, SIZE * 2 - 6, SIZE * 2 - 6);
-                ctx.fillStyle = '#ff00007f';
-                ctx.fill();
-                ctx.closePath();
-              }*/
+              }
             }
           }
         }.bind(this);
@@ -478,7 +459,6 @@
             ctx.arc((this.x * SIZE * 2) + SIZE, (this.y * SIZE * 2) + SIZE, PART_RADIUS, (open1 * Math.PI) + ((Math.PI / 2) * dirY) + (Math.PI * (dirX==-1?1:0)), (open2 * Math.PI) + ((Math.PI / 2) * dirY) + (Math.PI * (dirX==-1?1:0)));
             ctx.closePath();
           } else {
-            // New Part Style
             if(this.sides.top && this.sides.bottom) {
               ctx.beginPath();
               ctx.moveTo((this.x * SIZE * 2) + SIZE_PADDING, (this.y * SIZE * 2));
@@ -515,7 +495,6 @@
               ctx.closePath();
             }
             else {
-              // Old Part Style
               ctx.beginPath();
               ctx.arc((this.x * SIZE * 2) + SIZE, (this.y * SIZE * 2) + SIZE, PART_RADIUS, 0, 2 * Math.PI);
               ctx.closePath();
@@ -523,7 +502,6 @@
           }
           ctx.fillStyle = colors[this.index % 5];
           ctx.fill();
-          //ctx.stroke();
         }.bind(this);
       }
 
@@ -647,7 +625,6 @@
           x -= (SIZE / 1.5) * dirY;
           ctx.beginPath();
           ctx.arc(x, y, 2.5, 0, 2 * Math.PI);
-          // Old Eye Color:  ctx.fillStyle = '#313608';
           ctx.fillStyle = '#9EB308';
           ctx.fill();
           ctx.stroke();
