@@ -3,7 +3,15 @@
 <head>
   <title>SNAKE</title>
   <!--
+          _____ _   _          _  ________
+         / ____| \ | |   /\   | |/ /  ____|
+        | (___ |  \| |  /  \  | ' /| |__
+         \___ \| . ` | / /\ \ |  < |  __|
+         ____) | |\  |/ ____ \| . \| |____
+        |_____/|_| \_/_/    \_\_|\_\______|
+
     Created by Phillip Deremer (http://github.com/derDere/snake)
+
   -->
   <link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHZSURBVDhPbVJfS1RBFJ8zc/+MutumpGlsUUFpbY8JQhgpEn2J3nrooa/RS36EvkTgUz5ICdKD9JJQbbARRIoK2eK67u69d06/M3MzjX7MPfd3Zs6ZOf9o+V1VebBSFJjHvyor8rr2R2eWK/hgu/i+lUOCl/tUEnohL4CJOzveWs2aG1nW5yihfMBxStdno8ZCYivle5rgJOY8OOJXz7vvV/qdn86wvnolhgT/8Hqwstztth1CImK6NhM8VXWMsh6eEtxftLMPaPONW1/rh52p6ejRM0uakIPAGKVNoIJW07U+c6tZ+gN5j9t7PofwQpyo4Rr1j/5a2IrudRzIpRmDHOqNKFSJbt2Vf5yqxEqWsudhq1S/HU3fi2qTiAI5+rqywjWMhbthDXmyXC7FI6BsgEh8ZvSCaFqr2FKRCQ/A2c6X4tPbbO+bS0fo3Lj3VVw6gCZDZxzQh6Ae7ruvm/mPj8XkDWNHcLNHUShXBPp/nJ/StQkx9p32qR4furWXvfauVAYInQ68dlEvPR1KhyUX8/BJgtiwopRuzsUIY7flBseMtiB1ramxEM8/tlECG9ipU9P6Zx4xcL92XOfAVUY1ItFGdk9Pq6giZB6Fw2Ksbi7fiSGD9QlYqd/wDte7aAMg2AAAAABJRU5ErkJggg==" type="image/x-icon">
   <meta charset="UTF-8">
@@ -23,7 +31,6 @@
   <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHZSURBVDhPbVJfS1RBFJ8zc/+MutumpGlsUUFpbY8JQhgpEn2J3nrooa/RS36EvkTgUz5ICdKD9JJQbbARRIoK2eK67u69d06/M3MzjX7MPfd3Zs6ZOf9o+V1VebBSFJjHvyor8rr2R2eWK/hgu/i+lUOCl/tUEnohL4CJOzveWs2aG1nW5yihfMBxStdno8ZCYivle5rgJOY8OOJXz7vvV/qdn86wvnolhgT/8Hqwstztth1CImK6NhM8VXWMsh6eEtxftLMPaPONW1/rh52p6ejRM0uakIPAGKVNoIJW07U+c6tZ+gN5j9t7PofwQpyo4Rr1j/5a2IrudRzIpRmDHOqNKFSJbt2Vf5yqxEqWsudhq1S/HU3fi2qTiAI5+rqywjWMhbthDXmyXC7FI6BsgEh8ZvSCaFqr2FKRCQ/A2c6X4tPbbO+bS0fo3Lj3VVw6gCZDZxzQh6Ae7ruvm/mPj8XkDWNHcLNHUShXBPp/nJ/StQkx9p32qR4furWXvfauVAYInQ68dlEvPR1KhyUX8/BJgtiwopRuzsUIY7flBseMtiB1ramxEM8/tlECG9ipU9P6Zx4xcL92XOfAVUY1ItFGdk9Pq6giZB6Fw2Ksbi7fiSGD9QlYqd/wDte7aAMg2AAAAABJRU5ErkJggg==" sizes="144x144" >
   <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHZSURBVDhPbVJfS1RBFJ8zc/+MutumpGlsUUFpbY8JQhgpEn2J3nrooa/RS36EvkTgUz5ICdKD9JJQbbARRIoK2eK67u69d06/M3MzjX7MPfd3Zs6ZOf9o+V1VebBSFJjHvyor8rr2R2eWK/hgu/i+lUOCl/tUEnohL4CJOzveWs2aG1nW5yihfMBxStdno8ZCYivle5rgJOY8OOJXz7vvV/qdn86wvnolhgT/8Hqwstztth1CImK6NhM8VXWMsh6eEtxftLMPaPONW1/rh52p6ejRM0uakIPAGKVNoIJW07U+c6tZ+gN5j9t7PofwQpyo4Rr1j/5a2IrudRzIpRmDHOqNKFSJbt2Vf5yqxEqWsudhq1S/HU3fi2qTiAI5+rqywjWMhbthDXmyXC7FI6BsgEh8ZvSCaFqr2FKRCQ/A2c6X4tPbbO+bS0fo3Lj3VVw6gCZDZxzQh6Ae7ruvm/mPj8XkDWNHcLNHUShXBPp/nJ/StQkx9p32qR4furWXvfauVAYInQ68dlEvPR1KhyUX8/BJgtiwopRuzsUIY7flBseMtiB1ramxEM8/tlECG9ipU9P6Zx4xcL92XOfAVUY1ItFGdk9Pq6giZB6Fw2Ksbi7fiSGD9QlYqd/wDte7aAMg2AAAAABJRU5ErkJggg==" sizes="152x152" >
   <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHZSURBVDhPbVJfS1RBFJ8zc/+MutumpGlsUUFpbY8JQhgpEn2J3nrooa/RS36EvkTgUz5ICdKD9JJQbbARRIoK2eK67u69d06/M3MzjX7MPfd3Zs6ZOf9o+V1VebBSFJjHvyor8rr2R2eWK/hgu/i+lUOCl/tUEnohL4CJOzveWs2aG1nW5yihfMBxStdno8ZCYivle5rgJOY8OOJXz7vvV/qdn86wvnolhgT/8Hqwstztth1CImK6NhM8VXWMsh6eEtxftLMPaPONW1/rh52p6ejRM0uakIPAGKVNoIJW07U+c6tZ+gN5j9t7PofwQpyo4Rr1j/5a2IrudRzIpRmDHOqNKFSJbt2Vf5yqxEqWsudhq1S/HU3fi2qTiAI5+rqywjWMhbthDXmyXC7FI6BsgEh8ZvSCaFqr2FKRCQ/A2c6X4tPbbO+bS0fo3Lj3VVw6gCZDZxzQh6Ae7ruvm/mPj8XkDWNHcLNHUShXBPp/nJ/StQkx9p32qR4furWXvfauVAYInQ68dlEvPR1KhyUX8/BJgtiwopRuzsUIY7flBseMtiB1ramxEM8/tlECG9ipU9P6Zx4xcL92XOfAVUY1ItFGdk9Pq6giZB6Fw2Ksbi7fiSGD9QlYqd/wDte7aAMg2AAAAABJRU5ErkJggg==" sizes="180x180" >
-  <!--link rel="shortcut icon" href="ico/icon196.png" sizes="196x196" -->
 
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="SNAKE">
@@ -118,6 +125,11 @@
       margin-top: -220px;
     }
 
+    .mobile #scores {
+      top: 50px;
+      margin-top: 0px;
+    }
+
     table.score-table {
       border: 0 none;
       border-spacing: 0px;
@@ -150,6 +162,12 @@
       margin-top: -40px;
     }
 
+    .mobile #options {
+      top: 50px;
+      font-size: 30px;
+      margin-top: 0px;
+    }
+
     table.options th {
       text-align: left;
     }
@@ -169,6 +187,9 @@
 
     div.mobile-ui-btn {
       position: fixed;
+      width: 80px;
+      height: 80px;
+      background: silver;
     }
   </style>
 </head>
@@ -229,6 +250,7 @@
       };
 
       if ("ismobile") {
+        document.body.className = "mobile"
         const btnLayout = [
           ['^', 'w',  0,-1],
           ['<', 'a', -1, 0],
