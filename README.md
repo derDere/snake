@@ -22,7 +22,7 @@ There are some options to change the game up a bit and there is a local high sco
  - walls (or a tube maybe?)
  - Frame (What's in the box?!)
  - super high resolution nokia display
- - no mobile suport jet
+ - now mobile ready
  - real single page app
 
 ## Options
