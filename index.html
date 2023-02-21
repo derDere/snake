@@ -140,6 +140,9 @@
       text-align: center;
       opacity: .8;
     }
+    .mobile table.score-table td {
+      width: 150px;
+    }
     table.score-table tr:last-child td {
       border-bottom: 0 none;
     }
@@ -264,7 +267,7 @@
         return check;
       };
 
-      if ("ismobile") {
+      if (window.mobileCheck()) {
         document.body.className = "mobile"
         const btnLayout = [
           ['&uarr;', 'w',  0,  1],
