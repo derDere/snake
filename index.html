@@ -186,10 +186,25 @@
     }
 
     div.mobile-ui-btn {
+      color: #2B8571;
+      font-weight: bold;
       position: fixed;
       width: 120px;
       height: 120px;
-      background: silver;
+      font-size: 60px;
+      background: #ECEDF7;
+      border-radius: 40px;
+      line-height: 120px;
+      text-align: center;
+      vertical-align: middle;
+
+      border-top: 5px gray solid;
+
+      -webkit-box-shadow: 0px 0px 0px 5px rgb(255, 255, 255), 0px 0px 0px 10px rgb(0, 0, 0);
+      -moz-box-shadow: 0px 0px 0px 5px rgb(255, 255, 255), 0px 0px 0px 10px rgb(0, 0, 0);
+      box-shadow: 0px 0px 0px 5px rgb(255, 255, 255), 0px 0px 0px 10px rgb(0, 0, 0);
+
+      text-shadow: 0px 0px 10px #38AD93;
     }
   </style>
 </head>
@@ -252,18 +267,30 @@
       if ("ismobile") {
         document.body.className = "mobile"
         const btnLayout = [
-          ['^', 'w',  0,-1],
-          ['<', 'a', -1, 0],
-          ['v', 's',  0, 1],
-          ['>', 'd',  1, 0]
+          ['&uarr;', 'w',  0,  1],
+          ['&larr;', 'a',  1,  0],
+          ['&darr;', 's',  0, -1],
+          ['&rarr;', 'd', -1,  0],
+          ['||', ' ', 0,  0]
         ];
         for(let btnLay of btnLayout) {
           let [content, key, xO, yO] = btnLay;
           let btn = document.createElement('div');
           btn.className = "mobile-ui-btn";
-          btn.style.right = "20px";
-          btn.style.bottom = "20px";
-          btn.innerText = content;
+          let right = 20 + 120 + (120 * xO);
+          let bottom = 20 + 120 + (120 * yO);
+          if (xO == yO) {
+            btn.style.left = right + "px";
+          } else {
+            btn.style.right = right + "px";
+          }
+          btn.style.bottom = bottom + "px";
+          btn.innerHTML = content;
+          this['btn_touch_' + key] = function(key) {
+            this.onKeyDown({key:key});
+            return false;
+          }.bind(this, key);
+          btn.addEventListener("touchstart", this['btn_touch_' + key]);
           document.body.appendChild(btn);
         }
       }
